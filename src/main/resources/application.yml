@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: prueba
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/nequi
+    username: postgres
+    password: 1048213660
