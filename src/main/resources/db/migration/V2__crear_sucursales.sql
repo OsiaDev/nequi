@@ -1,15 +1,15 @@
 CREATE TABLE IF NOT EXISTS sucursales
 (
-    uuid_sucursal uuid NOT NULL,
+    id_sucursal bigserial NOT NULL,
     nombre_sucursal character varying(100) NOT NULL,
     fecha_sucursal timestamp without time zone NOT NULL,
-    uuid_franquicia uuid NOT NULL,
-    CONSTRAINT sucursales_pkey PRIMARY KEY (uuid_sucursal),
-    CONSTRAINT sucursales_uuid_franquicia_fkey FOREIGN KEY (uuid_franquicia)
-        REFERENCES franquicias (uuid_franquicia) MATCH SIMPLE
+    id_franquicia bigint NOT NULL,
+    CONSTRAINT sucursales_pkey PRIMARY KEY (id_sucursal),
+    CONSTRAINT sucursales_id_franquicia_fkey FOREIGN KEY (id_franquicia)
+        REFERENCES public.franquicias (id_franquicia) MATCH SIMPLE
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS sucursales_nombre_sucursal_uuid_franquicia_idx
+CREATE UNIQUE INDEX IF NOT EXISTS sucursales_nombre_sucursal_id_franquicia_idx
     ON sucursales USING btree
-        (nombre_sucursal ASC NULLS LAST, uuid_franquicia ASC NULLS LAST)
+        (nombre_sucursal ASC NULLS LAST, id_franquicia ASC NULLS LAST)
     WITH (deduplicate_items=True);
