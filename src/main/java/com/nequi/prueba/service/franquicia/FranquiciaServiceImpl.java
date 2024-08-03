@@ -23,7 +23,7 @@ public class FranquiciaServiceImpl implements FranquiciaService {
         Mono<Boolean> existsNameMono = this.repository.findByNombreFranquicia(franquicia.getNombreFranquicia()).hasElement();
         return existsNameMono.flatMap(existsName -> {
             if (existsName) {
-                return Mono.error(new Exception("El nombre del producto ya está en uso"));
+                return Mono.error(new Exception("El nombre de la franquicia ya está en uso"));
             } else {
                 return this.repository.save(franquicia);
             }
@@ -53,7 +53,8 @@ public class FranquiciaServiceImpl implements FranquiciaService {
 
     @Override
     public Mono<Void> deleteById(Long idFranquicia) {
-        return this.repository.deleteById(idFranquicia);
+        Mono<Boolean> franquicia = this.repository.findById(idFranquicia).hasElement();
+        return franquicia.flatMap(exists -> exists ? this.repository.deleteById(idFranquicia) : Mono.error(new Exception("No se encuentra la franquicia con el id: " + franquicia)));
     }
 
     private FranquiciaEntity mapFranquicia(Long idFranquicia, String nombreFranquicia) {
