@@ -1,0 +1,9 @@
+urldatabase: postgresql://localhost:5432/nequi
+
+spring:
+  r2dbc:
+    username: postgres
+    password: 1048213660
+    url: r2dbc:${urldatabase}
+  flyway:
+    url: jdbc:${urldatabase}
