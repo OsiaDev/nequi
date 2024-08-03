@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -19,7 +20,14 @@ public class FranquiciaServiceImpl implements FranquiciaService {
 
     @Override
     public Mono<FranquiciaEntity> save(FranquiciaEntity franquicia) {
-        return null;
+        Mono<Boolean> existsNameMono = this.repository.findByNombreFranquicia(franquicia.getNombreFranquicia()).hasElement();
+        return existsNameMono.flatMap(existsName -> {
+            if (existsName) {
+                return Mono.error(new Exception("El nombre del producto ya está en uso"));
+            } else {
+                return this.repository.save(franquicia);
+            }
+        });
     }
 
     @Override
@@ -28,19 +36,31 @@ public class FranquiciaServiceImpl implements FranquiciaService {
     }
 
     @Override
-    public Mono<FranquiciaEntity> findById(UUID uuidFranquicia) {
-        return this.repository.findById(uuidFranquicia);
+    public Mono<FranquiciaEntity> findById(Long idFranquicia) {
+        return this.repository.findById(idFranquicia).switchIfEmpty(Mono.error(new NoSuchElementException(idFranquicia.toString())));
     }
 
     @Override
-    public Mono<FranquiciaEntity> update(UUID uuidFranquicia, FranquiciaEntity franquicia) {
-        return null;
+    public Mono<FranquiciaEntity> update(Long idFranquicia, FranquiciaEntity franquicia) {
+        Mono<Boolean> franquiciaUuid = this.repository.findById(idFranquicia).hasElement();
+        Mono<Boolean> productRepeatedName = this.repository.nombreRepetido(idFranquicia, franquicia.getNombreFranquicia()).hasElement();
+        return franquiciaUuid.flatMap(
+                existsId -> existsId ?
+                        productRepeatedName.flatMap(existsName -> existsName ? Mono.error(new Exception("Nombre de Francia ya existe"))
+                                : this.repository.save(this.mapFranquicia(idFranquicia, franquicia.getNombreFranquicia())))
+                        : Mono.error(new Exception("product not found")));
     }
 
     @Override
-    public Mono<Void> deleteById(UUID uuidFranquicia) {
-        return this.repository.deleteById(uuidFranquicia);
+    public Mono<Void> deleteById(Long idFranquicia) {
+        return this.repository.deleteById(idFranquicia);
     }
 
+    private FranquiciaEntity mapFranquicia(Long idFranquicia, String nombreFranquicia) {
+        FranquiciaEntity franquicia = new FranquiciaEntity();
+        franquicia.setIdFranquicia(idFranquicia);
+        franquicia.setNombreFranquicia(nombreFranquicia);
+        return franquicia;
+    }
 
 }

@@ -16,10 +16,10 @@ public class FranquiciaRouter {
     RouterFunction<ServerResponse> routerFunction(FranquiciaHandler franquiciaHandler) {
         return RouterFunctions.route()
                 .GET(PATH + "/getAll", franquiciaHandler::getAll)
-                .GET(PATH + "/getById/", franquiciaHandler::getById)
-                .POST(PATH + "/save", franquiciaHandler::save)
-                .PUT(PATH + "/update/{uuidFranquicia}", franquiciaHandler::update)
-                .DELETE(PATH + "/deleteById/{uuidFranquicia}", franquiciaHandler::delete).build();
+                .GET(PATH + "/getById/{idFranquicia}", franquiciaHandler::getById)
+                .POST(PATH + "/create", franquiciaHandler::save)
+                .PUT(PATH + "/update/{idFranquicia}", franquiciaHandler::update)
+                .DELETE(PATH + "/deleteById/{idFranquicia}", franquiciaHandler::delete).build();
     }
 
 }

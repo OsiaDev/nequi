@@ -7,7 +7,6 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,8 +14,8 @@ import java.util.UUID;
 public class FranquiciaEntity {
 
     @Id
-    @Column(value = "uuid_franquicia")
-    private UUID idFranquicia = UUID.randomUUID();
+    @Column(value = "id_franquicia")
+    private Long idFranquicia;
 
     @Column(value = "nombre_franquicia")
     private String nombreFranquicia;
