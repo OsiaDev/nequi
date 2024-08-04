@@ -25,4 +25,6 @@ public interface ProductoService {
 
     Mono<ProductoEntity> removeStock(Long idProducto, StockProductoRequestDTO productoDTO);
 
+    Flux<ProductoEntity> getMaxStock(Long idFranquicia);
+
 }

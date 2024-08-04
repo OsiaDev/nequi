@@ -40,6 +40,13 @@ public class ProductoHandler {
                 .body(producto, ProductoEntity.class);
     }
 
+    public Mono<ServerResponse> getMaxStockByFranquicia(ServerRequest request) {
+        Long idFranquicia = Long.valueOf(request.pathVariable("idFranquicia"));
+        Flux<ProductoEntity> productos = this.service.getMaxStock(idFranquicia);
+        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(productos, ProductoEntity.class);
+    }
+
     public Mono<ServerResponse> save(ServerRequest request) {
         Mono<ProductoDTO> productoDTO = request.bodyToMono(ProductoDTO.class).doOnNext(this.validator::validate);
         return productoDTO.flatMap(p -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)

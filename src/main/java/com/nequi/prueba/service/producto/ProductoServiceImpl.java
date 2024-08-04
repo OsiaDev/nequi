@@ -6,6 +6,7 @@ import com.nequi.prueba.model.dto.ProductoDTO;
 import com.nequi.prueba.model.dto.StockProductoRequestDTO;
 import com.nequi.prueba.model.entity.ProductoEntity;
 import com.nequi.prueba.model.repository.ProductoRepository;
+import com.nequi.prueba.service.franquicia.FranquiciaService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ public class ProductoServiceImpl implements ProductoService {
     private static final String STOCK_NEGATIVO = "EL stock del producto no puede finalizar negativo: ";
 
     private ProductoRepository repository;
+
+    private FranquiciaService franquiciaService;
 
     @Override
     public Mono<ProductoEntity> save(ProductoDTO productoDTO) {
@@ -134,6 +137,12 @@ public class ProductoServiceImpl implements ProductoService {
                 return Mono.error(this.notFoundException(idProducto.toString()));
             }
         });
+    }
+
+    @Override
+    public Flux<ProductoEntity> getMaxStock(Long idFranquicia) {
+        return this.franquiciaService.findById(idFranquicia).flatMapMany(franquiciaEntity ->
+                this.repository.findMaxStockByFranquicia(idFranquicia));
     }
 
     private ProductoEntity mapProducto(Long idProducto, ProductoDTO productoDTO) {
