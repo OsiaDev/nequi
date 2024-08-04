@@ -11,6 +11,6 @@ public interface SucursalRepository extends ReactiveCrudRepository<SucursalEntit
             "AND id_franquicia = :idFranquicia")
     Mono<SucursalEntity> nombreRepetido(Long idSucursal, String nombreSucursal, Long idFranquicia);
 
-    Mono<SucursalEntity> findByNombreSucursal(String nombreSucursal);
+    Mono<SucursalEntity> findByNombreSucursalAndIdFranquicia(String nombreSucursal, Long idFranquicia);
 
 }

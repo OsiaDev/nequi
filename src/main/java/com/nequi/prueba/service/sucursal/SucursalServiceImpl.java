@@ -22,7 +22,8 @@ public class SucursalServiceImpl implements SucursalService {
 
     @Override
     public Mono<SucursalEntity> save(SucursalDTO sucursalDTO) {
-        Mono<Boolean> existsNameMono = this.repository.findByNombreSucursal(sucursalDTO.getNombreSucursal()).hasElement();
+        Mono<Boolean> existsNameMono = this.repository.findByNombreSucursalAndIdFranquicia(sucursalDTO.getNombreSucursal(),
+                sucursalDTO.getIdFranquicia()).hasElement();
         return existsNameMono.flatMap(existsName -> {
             if (existsName) {
                 return Mono.error(this::nombreDuplicadoException);
