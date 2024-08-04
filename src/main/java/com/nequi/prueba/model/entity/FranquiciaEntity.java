@@ -1,5 +1,6 @@
 package com.nequi.prueba.model.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 @Table(name = "franquicias")
 public class FranquiciaEntity {
 
@@ -20,6 +22,7 @@ public class FranquiciaEntity {
     @Column(value = "nombre_franquicia")
     private String nombreFranquicia;
 
+    @Builder.Default
     @Column(value = "fecha_franquicia")
     private LocalDateTime fechaFranquicia = LocalDateTime.now();
 

@@ -1,6 +1,7 @@
 package com.nequi.prueba.service.franquicia;
 
 import com.nequi.prueba.exception.CustomException;
+import com.nequi.prueba.model.dto.FranquiciaDTO;
 import com.nequi.prueba.model.entity.FranquiciaEntity;
 import com.nequi.prueba.model.repository.FranquiciaRepository;
 import lombok.AllArgsConstructor;
@@ -20,13 +21,13 @@ public class FranquiciaServiceImpl implements FranquiciaService {
     private FranquiciaRepository repository;
 
     @Override
-    public Mono<FranquiciaEntity> save(FranquiciaEntity franquicia) {
-        Mono<Boolean> existsNameMono = this.repository.findByNombreFranquicia(franquicia.getNombreFranquicia()).hasElement();
+    public Mono<FranquiciaEntity> save(FranquiciaDTO franquiciaDto) {
+        Mono<Boolean> existsNameMono = this.repository.findByNombreFranquicia(franquiciaDto.getNombreFranquicia()).hasElement();
         return existsNameMono.flatMap(existsName -> {
             if (existsName) {
                 return Mono.error(this::nombreDuplicadoException);
             } else {
-                return this.repository.save(franquicia);
+                return this.repository.save(this.crearFranquicia(franquiciaDto));
             }
         });
     }
@@ -42,16 +43,16 @@ public class FranquiciaServiceImpl implements FranquiciaService {
     }
 
     @Override
-    public Mono<FranquiciaEntity> update(Long idFranquicia, FranquiciaEntity franquicia) {
+    public Mono<FranquiciaEntity> update(Long idFranquicia, FranquiciaDTO franquiciaDto) {
         Mono<Boolean> franquiciaUuid = this.repository.findById(idFranquicia).hasElement();
-        Mono<Boolean> productRepeatedName = this.repository.nombreRepetido(idFranquicia, franquicia.getNombreFranquicia()).hasElement();
+        Mono<Boolean> productRepeatedName = this.repository.nombreRepetido(idFranquicia, franquiciaDto.getNombreFranquicia()).hasElement();
         return franquiciaUuid.flatMap(existsId -> {
             if (existsId) {
                 return productRepeatedName.flatMap(existsName -> {
                     if (existsName) {
                         return Mono.error(this::nombreDuplicadoException);
                     } else {
-                        return this.repository.save(this.mapFranquicia(idFranquicia, franquicia.getNombreFranquicia()));
+                        return this.repository.save(this.mapFranquicia(idFranquicia, franquiciaDto.getNombreFranquicia()));
                     }
                 });
             } else {
@@ -63,14 +64,11 @@ public class FranquiciaServiceImpl implements FranquiciaService {
     @Override
     public Mono<Void> deleteById(Long idFranquicia) {
         Mono<Boolean> franquicia = this.repository.findById(idFranquicia).hasElement();
-        return franquicia.flatMap(exists -> exists ? this.repository.deleteById(idFranquicia) : Mono.error(this.notFoundException(franquicia.toString())));
+        return franquicia.flatMap(exists -> exists ? this.repository.deleteById(idFranquicia) : Mono.error(this.notFoundException(idFranquicia.toString())));
     }
 
     private FranquiciaEntity mapFranquicia(Long idFranquicia, String nombreFranquicia) {
-        FranquiciaEntity franquicia = new FranquiciaEntity();
-        franquicia.setIdFranquicia(idFranquicia);
-        franquicia.setNombreFranquicia(nombreFranquicia);
-        return franquicia;
+        return FranquiciaEntity.builder().idFranquicia(idFranquicia).nombreFranquicia(nombreFranquicia).build();
     }
 
     private CustomException nombreDuplicadoException() {
@@ -83,6 +81,10 @@ public class FranquiciaServiceImpl implements FranquiciaService {
 
     private CustomException createException(HttpStatus status, String message) {
         return new CustomException(status, message);
+    }
+
+    private FranquiciaEntity crearFranquicia(FranquiciaDTO franquicia) {
+        return FranquiciaEntity.builder().nombreFranquicia(franquicia.getNombreFranquicia()).build();
     }
 
 }
