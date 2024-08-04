@@ -13,7 +13,7 @@ public class FranquiciaRouter {
     private static final String PATH = "franquicias";
 
     @Bean
-    RouterFunction<ServerResponse> routerFunction(FranquiciaHandler franquiciaHandler) {
+    RouterFunction<ServerResponse> franquiciaRouterFunction(FranquiciaHandler franquiciaHandler) {
         return RouterFunctions.route()
                 .GET(PATH + "/getAll", franquiciaHandler::getAll)
                 .GET(PATH + "/getById/{idFranquicia}", franquiciaHandler::getById)

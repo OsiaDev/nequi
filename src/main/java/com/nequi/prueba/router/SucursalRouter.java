@@ -13,12 +13,13 @@ public class SucursalRouter {
     private static final String PATH = "sucursales";
 
     @Bean
-    RouterFunction<ServerResponse> routerFunction(SucursalHandler sucursalHandler) {
+    RouterFunction<ServerResponse> sucursalRouterFunction(SucursalHandler sucursalHandler) {
         return RouterFunctions.route()
                 .GET(PATH + "/getAll", sucursalHandler::getAll)
                 .GET(PATH + "/getById/{idSucursal}", sucursalHandler::getById)
                 .POST(PATH + "/create", sucursalHandler::save)
                 .PUT(PATH + "/update/{idSucursal}", sucursalHandler::update)
+                .PATCH(PATH + "/updateName/{idSucursal}", sucursalHandler::updateNombre)
                 .DELETE(PATH + "/deleteById/{idSucursal}", sucursalHandler::delete).build();
     }
 

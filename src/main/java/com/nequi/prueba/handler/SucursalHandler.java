@@ -2,6 +2,7 @@ package com.nequi.prueba.handler;
 
 import com.nequi.prueba.common.annotation.RestHandler;
 import com.nequi.prueba.common.validation.ObjectValidator;
+import com.nequi.prueba.model.dto.NombreSucursalRequestDTO;
 import com.nequi.prueba.model.dto.SucursalDTO;
 import com.nequi.prueba.model.entity.SucursalEntity;
 import com.nequi.prueba.service.sucursal.SucursalService;
@@ -48,6 +49,13 @@ public class SucursalHandler {
         Mono<SucursalDTO> sucursalDto = request.bodyToMono(SucursalDTO.class).doOnNext(this.validator::validate);
         return sucursalDto.flatMap(s -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(this.service.update(idSucursal, s), SucursalEntity.class));
+    }
+
+    public Mono<ServerResponse> updateNombre(ServerRequest request) {
+        Long idSucursal = Long.valueOf(request.pathVariable(ID));
+        Mono<NombreSucursalRequestDTO> sucursalDto = request.bodyToMono(NombreSucursalRequestDTO.class).doOnNext(this.validator::validate);
+        return sucursalDto.flatMap(s -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(this.service.updateNombre(idSucursal, s), SucursalEntity.class));
     }
 
     public Mono<ServerResponse> delete(ServerRequest request) {

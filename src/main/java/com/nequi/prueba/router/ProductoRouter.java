@@ -13,7 +13,7 @@ public class ProductoRouter {
     private static final String PATH = "productos";
 
     @Bean
-    RouterFunction<ServerResponse> routerFunction(ProductoHandler productoHandler) {
+    RouterFunction<ServerResponse> productRouterFunction(ProductoHandler productoHandler) {
         return RouterFunctions.route()
                 .GET(PATH + "/getAll", productoHandler::getAll)
                 .GET(PATH + "/getById/{idProducto}", productoHandler::getById)

@@ -1,6 +1,7 @@
 package com.nequi.prueba.service.sucursal;
 
 import com.nequi.prueba.exception.CustomException;
+import com.nequi.prueba.model.dto.NombreSucursalRequestDTO;
 import com.nequi.prueba.model.dto.SucursalDTO;
 import com.nequi.prueba.model.entity.SucursalEntity;
 import com.nequi.prueba.model.repository.SucursalRepository;
@@ -28,7 +29,7 @@ public class SucursalServiceImpl implements SucursalService {
             if (existsName) {
                 return Mono.error(this::nombreDuplicadoException);
             } else {
-                return this.repository.save(this.crearFranquicia(sucursalDTO));
+                return this.repository.save(this.crearSucursal(sucursalDTO));
             }
         });
     }
@@ -45,9 +46,9 @@ public class SucursalServiceImpl implements SucursalService {
 
     @Override
     public Mono<SucursalEntity> update(Long idSucursal, SucursalDTO sucursalDTO) {
-        Mono<Boolean> franquiciaUuid = this.repository.findById(idSucursal).hasElement();
+        Mono<Boolean> sucursalId = this.repository.findById(idSucursal).hasElement();
         Mono<Boolean> productRepeatedName = this.repository.nombreRepetido(idSucursal, sucursalDTO.getNombreSucursal(), sucursalDTO.getIdFranquicia()).hasElement();
-        return franquiciaUuid.flatMap(existsId -> {
+        return sucursalId.flatMap(existsId -> {
             if (existsId) {
                 return productRepeatedName.flatMap(existsName -> {
                     if (existsName) {
@@ -60,6 +61,25 @@ public class SucursalServiceImpl implements SucursalService {
                 return Mono.error(this.notFoundException(idSucursal.toString()));
             }
         });
+    }
+
+    @Override
+    public Mono<SucursalEntity> updateNombre(Long idSucursal, NombreSucursalRequestDTO sucursalDTO) {
+        Mono<SucursalEntity> sucursalEntityMono = this.repository.findById(idSucursal);
+        Mono<Boolean> sucursalId = sucursalEntityMono.hasElement();
+        return sucursalId.flatMap(existsId -> sucursalEntityMono
+                .flatMap(sucursalEntity -> this.repository.nombreRepetido(idSucursal, sucursalDTO.getNombreSucursal(), sucursalEntity.getIdFranquicia())
+                        .hasElement()
+                        .flatMap(exists -> {
+                            if (exists) {
+                                return Mono.error(this::nombreDuplicadoException);
+                            } else {
+                                sucursalEntity.setNombreSucursal(sucursalDTO.getNombreSucursal());
+                                return repository.save(sucursalEntity);
+                            }
+                        })
+                )
+        );
     }
 
     @Override
@@ -87,8 +107,10 @@ public class SucursalServiceImpl implements SucursalService {
         return new CustomException(status, message);
     }
 
-    private SucursalEntity crearFranquicia(SucursalDTO sucursal) {
-        return SucursalEntity.builder().nombreSucursal(sucursal.getNombreSucursal()).build();
+    private SucursalEntity crearSucursal(SucursalDTO sucursal) {
+        return SucursalEntity.builder().nombreSucursal(sucursal.getNombreSucursal())
+                .idFranquicia(sucursal.getIdFranquicia())
+                .build();
     }
 
 }
