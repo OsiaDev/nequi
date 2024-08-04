@@ -2,8 +2,10 @@ package com.nequi.prueba.handler;
 
 import com.nequi.prueba.common.annotation.RestHandler;
 import com.nequi.prueba.common.validation.ObjectValidator;
+import com.nequi.prueba.model.dto.NombreProductoRequestDTO;
 import com.nequi.prueba.model.dto.ProductoDTO;
 import com.nequi.prueba.model.entity.ProductoEntity;
+import com.nequi.prueba.model.entity.SucursalEntity;
 import com.nequi.prueba.service.producto.ProductoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -48,6 +50,13 @@ public class ProductoHandler {
         Mono<ProductoDTO> productoDTO = request.bodyToMono(ProductoDTO.class).doOnNext(this.validator::validate);
         return productoDTO.flatMap(f -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(this.service.update(idProducto, f), ProductoEntity.class));
+    }
+
+    public Mono<ServerResponse> updateNombre(ServerRequest request) {
+        Long idProducto = Long.valueOf(request.pathVariable(ID));
+        Mono<NombreProductoRequestDTO> sucursalDto = request.bodyToMono(NombreProductoRequestDTO.class).doOnNext(this.validator::validate);
+        return sucursalDto.flatMap(s -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(this.service.updateNombre(idProducto, s), ProductoEntity.class));
     }
 
     public Mono<ServerResponse> delete(ServerRequest request) {

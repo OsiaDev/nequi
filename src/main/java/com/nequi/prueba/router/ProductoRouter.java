@@ -19,6 +19,7 @@ public class ProductoRouter {
                 .GET(PATH + "/getById/{idProducto}", productoHandler::getById)
                 .POST(PATH + "/create", productoHandler::save)
                 .PUT(PATH + "/update/{idProducto}", productoHandler::update)
+                .PATCH(PATH + "/updateName/{idProducto}", productoHandler::updateNombre)
                 .DELETE(PATH + "/deleteById/{idProducto}", productoHandler::delete).build();
     }
 

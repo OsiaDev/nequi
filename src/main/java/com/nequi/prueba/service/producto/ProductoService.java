@@ -1,5 +1,6 @@
 package com.nequi.prueba.service.producto;
 
+import com.nequi.prueba.model.dto.NombreProductoRequestDTO;
 import com.nequi.prueba.model.dto.ProductoDTO;
 import com.nequi.prueba.model.entity.ProductoEntity;
 import reactor.core.publisher.Flux;
@@ -14,6 +15,8 @@ public interface ProductoService {
     Mono<ProductoEntity> findById(Long idProducto);
 
     Mono<ProductoEntity> update(Long idProducto, ProductoDTO productoDTO);
+
+    Mono<ProductoEntity> updateNombre(Long idProducto, NombreProductoRequestDTO productoDTO);
 
     Mono<Void> deleteById(Long idProducto);
 

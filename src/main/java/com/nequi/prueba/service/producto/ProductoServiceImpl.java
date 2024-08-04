@@ -1,8 +1,10 @@
 package com.nequi.prueba.service.producto;
 
 import com.nequi.prueba.exception.CustomException;
+import com.nequi.prueba.model.dto.NombreProductoRequestDTO;
 import com.nequi.prueba.model.dto.ProductoDTO;
 import com.nequi.prueba.model.entity.ProductoEntity;
+import com.nequi.prueba.model.entity.SucursalEntity;
 import com.nequi.prueba.model.repository.ProductoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -61,6 +63,25 @@ public class ProductoServiceImpl implements ProductoService {
                 return Mono.error(this.notFoundException(idProducto.toString()));
             }
         });
+    }
+
+    @Override
+    public Mono<ProductoEntity> updateNombre(Long idProducto, NombreProductoRequestDTO productoDTO) {
+        Mono<ProductoEntity> productoEntityMono = this.repository.findById(idProducto);
+        Mono<Boolean> sucursalId = productoEntityMono.hasElement();
+        return sucursalId.flatMap(existsId -> productoEntityMono
+                .flatMap(productoEntity -> this.repository.nombreRepetido(idProducto, productoDTO.getNombreProducto(), productoEntity.getIdSucursal())
+                        .hasElement()
+                        .flatMap(exists -> {
+                            if (exists) {
+                                return Mono.error(this::nombreDuplicadoException);
+                            } else {
+                                productoEntity.setNombreProducto(productoDTO.getNombreProducto());
+                                return repository.save(productoEntity);
+                            }
+                        })
+                )
+        );
     }
 
     @Override
