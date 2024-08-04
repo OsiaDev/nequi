@@ -40,8 +40,8 @@ public class SucursalHandler {
 
     public Mono<ServerResponse> save(ServerRequest request) {
         Mono<SucursalDTO> sucursalDTO = request.bodyToMono(SucursalDTO.class).doOnNext(this.validator::validate);
-        return sucursalDTO.flatMap(f -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(this.service.save(f), SucursalEntity.class));
+        return sucursalDTO.flatMap(p -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(this.service.save(p), SucursalEntity.class));
     }
 
     public Mono<ServerResponse> update(ServerRequest request) {

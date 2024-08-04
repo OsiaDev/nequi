@@ -22,6 +22,9 @@ public class ProductoEntity {
     @Column(value = "nombre_producto")
     private String nombreProducto;
 
+    @Column(value = "stock_producto")
+    private Integer stockProducto;
+
     @Builder.Default
     @Column(value = "fecha_producto")
     private LocalDateTime fechaProducto = LocalDateTime.now();

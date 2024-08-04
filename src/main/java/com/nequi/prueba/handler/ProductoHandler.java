@@ -4,6 +4,7 @@ import com.nequi.prueba.common.annotation.RestHandler;
 import com.nequi.prueba.common.validation.ObjectValidator;
 import com.nequi.prueba.model.dto.NombreProductoRequestDTO;
 import com.nequi.prueba.model.dto.ProductoDTO;
+import com.nequi.prueba.model.dto.StockProductoRequestDTO;
 import com.nequi.prueba.model.entity.ProductoEntity;
 import com.nequi.prueba.model.entity.SucursalEntity;
 import com.nequi.prueba.service.producto.ProductoService;
@@ -48,15 +49,29 @@ public class ProductoHandler {
     public Mono<ServerResponse> update(ServerRequest request) {
         Long idProducto = Long.valueOf(request.pathVariable(ID));
         Mono<ProductoDTO> productoDTO = request.bodyToMono(ProductoDTO.class).doOnNext(this.validator::validate);
-        return productoDTO.flatMap(f -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(this.service.update(idProducto, f), ProductoEntity.class));
+        return productoDTO.flatMap(p -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(this.service.update(idProducto, p), ProductoEntity.class));
     }
 
     public Mono<ServerResponse> updateNombre(ServerRequest request) {
         Long idProducto = Long.valueOf(request.pathVariable(ID));
-        Mono<NombreProductoRequestDTO> sucursalDto = request.bodyToMono(NombreProductoRequestDTO.class).doOnNext(this.validator::validate);
-        return sucursalDto.flatMap(s -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(this.service.updateNombre(idProducto, s), ProductoEntity.class));
+        Mono<NombreProductoRequestDTO> productoDto = request.bodyToMono(NombreProductoRequestDTO.class).doOnNext(this.validator::validate);
+        return productoDto.flatMap(p -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(this.service.updateNombre(idProducto, p), ProductoEntity.class));
+    }
+
+    public Mono<ServerResponse> addStock(ServerRequest request) {
+        Long idProducto = Long.valueOf(request.pathVariable(ID));
+        Mono<StockProductoRequestDTO> productoDto = request.bodyToMono(StockProductoRequestDTO.class).doOnNext(this.validator::validate);
+        return productoDto.flatMap(p -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(this.service.addStock(idProducto, p), ProductoEntity.class));
+    }
+
+    public Mono<ServerResponse> removeStock(ServerRequest request) {
+        Long idProducto = Long.valueOf(request.pathVariable(ID));
+        Mono<StockProductoRequestDTO> sucursalDto = request.bodyToMono(StockProductoRequestDTO.class).doOnNext(this.validator::validate);
+        return sucursalDto.flatMap(p -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(this.service.removeStock(idProducto, p), ProductoEntity.class));
     }
 
     public Mono<ServerResponse> delete(ServerRequest request) {
