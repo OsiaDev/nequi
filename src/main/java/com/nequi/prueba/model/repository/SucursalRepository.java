@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 
 public interface SucursalRepository extends ReactiveCrudRepository<SucursalEntity, Long> {
 
-    @Query("SELECT * FROM sucursales WHERE sucursales.id_sucursal != :idSucursal AND nombre_sucursal = :nombreSucursal " +
+    @Query("SELECT * FROM sucursales WHERE id_sucursal != :idSucursal AND nombre_sucursal = :nombreSucursal " +
             "AND id_franquicia = :idFranquicia")
     Mono<SucursalEntity> nombreRepetido(Long idSucursal, String nombreSucursal, Long idFranquicia);
 
