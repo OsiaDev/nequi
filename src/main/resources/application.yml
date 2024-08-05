@@ -1,9 +1,9 @@
-urldatabase: postgresql://localhost:5432/nequi
+urldatabase: ${DATABASE_URL}
 
 spring:
   r2dbc:
-    username: postgres
-    password: 1048213660
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     url: r2dbc:${urldatabase}
   flyway:
     url: jdbc:${urldatabase}
