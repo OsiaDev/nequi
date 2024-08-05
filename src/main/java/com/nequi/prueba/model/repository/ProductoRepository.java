@@ -14,12 +14,16 @@ public interface ProductoRepository extends ReactiveCrudRepository<ProductoEntit
 
     Mono<ProductoEntity> findByNombreProductoAndIdSucursal(String nombreProducto, Long idSucursal);
 
-    @Query("SELECT p.id_producto, p.nombre_producto, MAX(p.stock_producto) AS stock_producto, " +
-            "p.fecha_producto, p.id_sucursal FROM productos p " +
-            "INNER JOIN sucursales s ON (s.id_sucursal = p.id_sucursal) " +
+    @Query("WITH MaxStockOrder AS (SELECT s.id_sucursal, p.id_producto, p.nombre_producto, p.fecha_producto, " +
+            "p.stock_producto, s.nombre_sucursal, ROW_NUMBER() OVER (PARTITION BY s.id_sucursal ORDER BY p.stock_producto DESC) AS rnk " +
+            "FROM productos p " +
+            "JOIN sucursales s ON p.id_sucursal = s.id_sucursal " +
             "WHERE s.id_franquicia = :idFranquicia " +
-            "GROUP BY p.id_producto, p.nombre_producto, p.fecha_producto, p.id_sucursal " +
-            "ORDER BY stock_producto DESC")
+            ")" +
+            "SELECT rp.id_sucursal, rp.nombre_sucursal, rp.id_producto, rp.nombre_producto, rp.stock_producto, rp.fecha_producto " +
+            "FROM MaxStockOrder rp " +
+            "WHERE rp.rnk = 1 " +
+            "ORDER BY rp.nombre_sucursal")
     Flux<ProductoEntity> findMaxStockByFranquicia(Long idFranquicia);
 
 }
