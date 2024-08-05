@@ -1,10 +1,10 @@
-urldatabase: ${DATABASE_URL}
+urldatabase: ${URL_DATABASE}
 
 spring:
   port: $PORT
   r2dbc:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    url: r2dbc:${DATABASE_URL}
+    url: r2dbc:${URL_DATABASE}
   flyway:
-    url: jdbc:${DATABASE_URL}
+    url: jdbc:${URL_DATABASE}
