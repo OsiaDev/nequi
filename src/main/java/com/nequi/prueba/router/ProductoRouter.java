@@ -17,11 +17,13 @@ public class ProductoRouter {
         return RouterFunctions.route()
                 .GET(PATH + "/getAll", productoHandler::getAll)
                 .GET(PATH + "/getById/{idProducto}", productoHandler::getById)
-                .GET(PATH + "/getMaxStock/{idFranquicia}", productoHandler::getById)
+                .GET(PATH + "/getMaxStock/{idFranquicia}", productoHandler::getMaxStockByFranquicia)
                 .POST(PATH + "/create", productoHandler::save)
                 .PUT(PATH + "/update/{idProducto}", productoHandler::update)
                 .PATCH(PATH + "/updateName/{idProducto}", productoHandler::updateNombre)
-                .DELETE(PATH + "/deleteById/{idProducto}", productoHandler::delete).build();
+                .DELETE(PATH + "/deleteById/{idProducto}", productoHandler::delete)
+                .POST(PATH + "/addStock/{idProducto}", productoHandler::addStock)
+                .POST(PATH + "/removeStock/{idProducto}", productoHandler::removeStock).build();
     }
 
 }

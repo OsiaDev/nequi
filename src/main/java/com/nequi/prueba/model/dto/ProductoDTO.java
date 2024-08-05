@@ -14,6 +14,7 @@ public class ProductoDTO implements Serializable {
     private String nombreProducto;
 
     @Min(value = 0, message = "No puede ingresar un stock negativo")
+    @NotNull(message = "Debe ingresar un stock mayor a 0")
     private Integer stockProducto;
 
     @NotNull(message = "Debe ingresar una sucursal")
