@@ -1,7 +1,9 @@
 urldatabase: ${URL_DATABASE}
 
+server:
+  port: ${PORT:8080}
+
 spring:
-  port: ${PORT}
   r2dbc:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
