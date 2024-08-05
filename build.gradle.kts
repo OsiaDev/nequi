@@ -8,15 +8,21 @@ group = "com.nequi"
 version = "0.0.1-SNAPSHOT"
 
 java {
-	manifest {
-        attributes 'Main-Class': 'com.nequi.prueba.PruebaApplication'
-    }
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
 }
+
+tasks.jar {
+    manifest {
+        attributes(
+            "Main-Class" to "com.nequi.prueba.PruebaApplication"
+        )
+    }
+}
+
 
 configurations {
 	compileOnly {
