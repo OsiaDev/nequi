@@ -7,6 +7,6 @@ spring:
   r2dbc:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    url: r2dbc:${DATABASE_URL}
+    url: r2dbc:${URL_DATABASE}
   flyway:
     url: jdbc:${URL_DATABASE}
