@@ -1,1 +1,1 @@
-java -jar -Dserver.port=$PORT  $JAVA_OPTS build/libs/*.jar
+web: java -jar target/libs/prueba-0.0.1-SNAPSHOT.jar
