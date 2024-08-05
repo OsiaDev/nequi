@@ -15,10 +15,6 @@ java {
 	targetCompatibility = JavaVersion.VERSION_17
 }
 
-tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
-    mainClass.set("com.nequi.prueba.PruebaApplication")
-}
-
 configurations {
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
@@ -30,7 +26,6 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
