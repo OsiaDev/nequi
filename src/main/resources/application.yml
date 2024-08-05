@@ -9,4 +9,4 @@ spring:
     password: ${DB_PASSWORD}
     url: r2dbc:${DATABASE_URL}
   flyway:
-    url: jdbc:${DATABASE_URL}
+    url: jdbc:${URL_DATABASE}
