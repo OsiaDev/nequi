@@ -15,7 +15,7 @@ java {
 	targetCompatibility = JavaVersion.VERSION_17
 }
 
-tasks.jar {
+tasks.withType<Jar> {
     manifest {
         attributes(
             "Main-Class" to "com.nequi.prueba.PruebaApplication"
@@ -23,12 +23,8 @@ tasks.jar {
     }
 }
 
-tasks.withType<Jar> {
-    enabled = true
-}
-
-tasks.register<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
-    mainClassName = "com.nequi.prueba.PruebaApplication"
+tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {
+    mainClass.set("com.nequi.prueba.PruebaApplication")
 }
 
 configurations {
