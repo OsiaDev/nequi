@@ -9,4 +9,4 @@ spring:
     password: ${DB_PASSWORD}
     url: r2dbc:${URL_DATABASE}
   flyway:
-    url: jdbc:${URL_DATABASE}
+    url: jdbc:postgresql://c5flugvup2318r.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/dfnpu1ro7c55vd
