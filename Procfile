@@ -1,1 +1,1 @@
-web: java -jar target/libs/prueba-0.0.1-SNAPSHOT.jar
+web: java -jar buid/libs/prueba-0.0.1-SNAPSHOT.jar
