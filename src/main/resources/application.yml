@@ -1,4 +1,4 @@
-urldatabase: postgresql://postgres://ua7upedj465om:p1b5ab556fbbd17633caaad15daba1961fe8eb82e52a2b4c0bd6c2bf048f48f3e@c5flugvup2318r.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/dfnpu1ro7c55vd:5432/dfnpu1ro7c55vd
+urldatabase: postgres://ua7upedj465om:p1b5ab556fbbd17633caaad15daba1961fe8eb82e52a2b4c0bd6c2bf048f48f3e@c5flugvup2318r.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/dfnpu1ro7c55vd:5432/dfnpu1ro7c55vd
 
 spring:
   r2dbc:
