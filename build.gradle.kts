@@ -8,6 +8,9 @@ group = "com.nequi"
 version = "0.0.1-SNAPSHOT"
 
 java {
+	manifest {
+        attributes 'Main-Class': 'com.nequi.prueba.PruebaApplication'
+    }
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
